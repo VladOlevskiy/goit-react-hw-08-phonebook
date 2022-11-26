@@ -4,19 +4,12 @@ import { ContactForm } from './ContactForm/ContactForm ';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import { FcPhoneAndroid } from 'react-icons/fc';
-import { useSelector } from 'react-redux';
-import { getFilter } from '../redux/filterSlice';
-import { getContacts } from '../redux/contactsSlice';
+import { useFetchContactsQuery } from '../redux/contactsSlice';
+import { ColorRing } from 'react-loader-spinner';
 
 export const App = () => {
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
+  const { data: contact, isLoading } = useFetchContactsQuery();
 
-  const normalizedFilterSearch = filter.toLowerCase();
-
-  const filteredContact = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(normalizedFilterSearch)
-  );
   return (
     <>
       <Box paddingBottom="30px" paddingTop="30px">
@@ -39,11 +32,17 @@ export const App = () => {
           </h1>
           <ContactForm />
           <h2>Contacts</h2>
-          {contacts.length >= 1 && (
-            <Filter />
-            //  }
+          {isLoading && <ColorRing />}
+          {contact !== undefined && contact.length > 0 ? (
+            <>
+              {<Filter />}
+              {<ContactList />}
+            </>
+          ) : (
+            <p>No contacts here ...</p>
           )}
-          <ContactList contact={filteredContact} />
+
+          {/* )} */}
         </Box>
       </Box>
     </>

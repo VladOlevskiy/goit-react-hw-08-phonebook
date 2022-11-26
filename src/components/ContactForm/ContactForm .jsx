@@ -2,11 +2,12 @@ import React from 'react';
 import { Formik, ErrorMessage } from 'formik';
 import { Form, Label, Field, Button } from './ContactForm-styled';
 import * as yup from 'yup';
-import { useDispatch } from 'react-redux';
-import { addContacts } from '../../redux/contactsSlice';
-import { nanoid } from 'nanoid';
-import { useSelector } from 'react-redux';
-import { getContacts } from '../../redux/contactsSlice';
+import {
+  useAddContactMutation,
+  useFetchContactsQuery,
+} from '../../redux/contactsSlice';
+import toast, { Toaster } from 'react-hot-toast';
+import { ColorRing } from 'react-loader-spinner';
 
 yup.addMethod(yup.string, 'numeric', function () {
   return this.matches(/^\d+$/, 'The field should have digits only');
@@ -14,28 +15,32 @@ yup.addMethod(yup.string, 'numeric', function () {
 
 const schema = yup.object().shape({
   name: yup.string().min(3).required(),
-  number: yup.string().numeric().min(12).required(),
+  phone: yup.string().numeric().min(12).required(),
 });
 
 const initialValues = {
   name: '',
-  number: '',
+  phone: '',
 };
 
 export const ContactForm = () => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const [addContact, { isLoading: addLoading }] = useAddContactMutation();
+  const { data: contacts, error: errorFetch } = useFetchContactsQuery();
 
-  const handleSubmit = (values, { resetForm }) => {
-    const id = nanoid();
+  const handleSubmit = async (values, { resetForm }) => {
     if (
       contacts.some(
         contact => contact.name.toLowerCase() === values.name.toLowerCase()
       )
     ) {
-      return alert(`${values.name} is already in contacts.`);
+      return toast.error(`${values.name} is already in contacts.`);
     }
-    dispatch(addContacts({ id: id, ...values }));
+    try {
+      await addContact(values);
+      toast.success('Контакт додано успішно');
+    } catch (error) {
+      toast.error(`Помилка ${errorFetch}, контакт не доданий`);
+    }
     resetForm();
   };
 
@@ -61,14 +66,16 @@ export const ContactForm = () => {
           Phone
           <Field
             type="tel"
-            name="number"
+            name="phone"
             placeholder="Enter your tel..."
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
           />
         </Label>
-        <ErrorMessage name="number" component="div" />
+        <ErrorMessage name="phone" component="div" />
         <Button type="submit">Add contact</Button>
+        <Toaster />
+        {addLoading && <ColorRing />}
       </Form>
     </Formik>
   );

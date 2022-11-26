@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { DebounceInput } from 'react-debounce-input';
 
 export const Label = styled.label`
   font-size: 18px;
@@ -6,7 +7,7 @@ export const Label = styled.label`
   display: flex;
 `;
 
-export const Input = styled.input`
+export const Input = styled(DebounceInput)`
   width: 170px;
   height: 20px;
   margin-left: 5px;

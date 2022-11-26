@@ -1,9 +1,5 @@
 import styled from 'styled-components';
 
-export const Message = styled.span`
-  margin-bottom: 30px;
-`;
-
 export const Box = styled.div`
   display: flex;
   align-items: center;

@@ -10,13 +10,15 @@ export const Filter = () => {
   const filter = useSelector(getFilter);
 
   const onChange = e => {
-    dispatch(foundedContact(e.currentTarget.value));
+    dispatch(foundedContact(e.target.value));
   };
 
   return (
     <Label>
       Search
       <Input
+        minLength={2}
+        debounceTimeout={300}
         type="text"
         onChange={onChange}
         value={filter}
