@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, ErrorMessage } from 'formik';
 import { Form, Label, Field, Button } from './ContactForm-styled';
 import * as yup from 'yup';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../redux/contacts/operations';
 
@@ -25,7 +25,7 @@ export const ContactForm = () => {
 
   const contacts = useSelector(state => state.contacts.items);
   const errorFetch = useSelector(state => state.contacts.error);
-  const addLoading = useSelector(state => state.contacts.isLoading);
+  // const addLoading = useSelector(state => state.contacts.isLoading);
 
   const handleSubmit = async (values, { resetForm }) => {
     if (
