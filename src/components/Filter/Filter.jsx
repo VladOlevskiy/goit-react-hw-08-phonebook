@@ -1,8 +1,8 @@
 import React from 'react';
 import { Label, Input } from './Filter-styled';
-import { foundedContact } from '../../redux/filterSlice';
+import { foundedContact } from '../../redux/contacts/filterSlice';
 import { useDispatch } from 'react-redux';
-import { getFilter } from '../../redux/filterSlice';
+import { getFilter } from '../../redux/contacts/filterSlice';
 import { useSelector } from 'react-redux';
 
 export const Filter = () => {
@@ -17,7 +17,7 @@ export const Filter = () => {
     <Label>
       Search
       <Input
-        minLength={2}
+        minLength={1}
         debounceTimeout={300}
         type="text"
         onChange={onChange}

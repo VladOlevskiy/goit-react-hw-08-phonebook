@@ -1,17 +1,17 @@
 import React from 'react';
 import { Box, Button, Info, Li } from './ContactList-styled';
 import { FcInfo } from 'react-icons/fc';
-import {
-  useFetchContactsQuery,
-  useDeleteContactMutation,
-} from '../../redux/contactsSlice';
-import { useSelector } from 'react-redux';
-import { getFilter } from '../../redux/filterSlice';
+import { getFilter } from '../../redux/contacts/filterSlice';
 import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact } from 'redux/contacts/operations';
 
 export const ContactList = () => {
-  const { data: contact, error } = useFetchContactsQuery();
-  const [deleteContact, result] = useDeleteContactMutation();
+  const dispatch = useDispatch();
+  const contact = useSelector(state => state.contacts.items);
+  const isLoading = useSelector(state => state.contacts.isLoading);
+
+  const error = useSelector(state => state.contacts.error);
 
   const filter = useSelector(getFilter);
 
@@ -35,15 +35,15 @@ export const ContactList = () => {
                 <Box>
                   <Info>
                     <FcInfo size={24} />
-                    {item.name} : (Tel: - {item.phone})
+                    {item.name} : (Tel: - {item.number})
                   </Info>
                   <Button
                     type="button"
                     onClick={() => {
-                      deleteContact(item.id);
+                      dispatch(deleteContact(item.id));
                       toast.success('Deleted successfully');
                     }}
-                    disabled={result.isLoading}
+                    disabled={isLoading}
                   >
                     Delete
                   </Button>

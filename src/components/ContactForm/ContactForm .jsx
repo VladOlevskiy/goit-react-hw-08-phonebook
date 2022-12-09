@@ -2,12 +2,9 @@ import React from 'react';
 import { Formik, ErrorMessage } from 'formik';
 import { Form, Label, Field, Button } from './ContactForm-styled';
 import * as yup from 'yup';
-import {
-  useAddContactMutation,
-  useFetchContactsQuery,
-} from '../../redux/contactsSlice';
 import toast, { Toaster } from 'react-hot-toast';
-import { ColorRing } from 'react-loader-spinner';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from '../../redux/contacts/operations';
 
 yup.addMethod(yup.string, 'numeric', function () {
   return this.matches(/^\d+$/, 'The field should have digits only');
@@ -15,17 +12,20 @@ yup.addMethod(yup.string, 'numeric', function () {
 
 const schema = yup.object().shape({
   name: yup.string().min(3).required(),
-  phone: yup.string().numeric().min(12).required(),
+  number: yup.string().numeric().min(12).required(),
 });
 
 const initialValues = {
   name: '',
-  phone: '',
+  number: '',
 };
 
 export const ContactForm = () => {
-  const [addContact, { isLoading: addLoading }] = useAddContactMutation();
-  const { data: contacts, error: errorFetch } = useFetchContactsQuery();
+  const dispatch = useDispatch();
+
+  const contacts = useSelector(state => state.contacts.items);
+  const errorFetch = useSelector(state => state.contacts.error);
+  const addLoading = useSelector(state => state.contacts.isLoading);
 
   const handleSubmit = async (values, { resetForm }) => {
     if (
@@ -36,7 +36,7 @@ export const ContactForm = () => {
       return toast.error(`${values.name} is already in contacts.`);
     }
     try {
-      await addContact(values);
+      await dispatch(addContact(values));
       toast.success('Контакт додано успішно');
     } catch (error) {
       toast.error(`Помилка ${errorFetch}, контакт не доданий`);
@@ -66,16 +66,14 @@ export const ContactForm = () => {
           Phone
           <Field
             type="tel"
-            name="phone"
+            name="number"
             placeholder="Enter your tel..."
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
           />
         </Label>
-        <ErrorMessage name="phone" component="div" />
+        <ErrorMessage name="number" component="div" />
         <Button type="submit">Add contact</Button>
-        <Toaster />
-        {addLoading && <ColorRing />}
       </Form>
     </Formik>
   );

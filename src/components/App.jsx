@@ -1,50 +1,63 @@
 import React from 'react';
-import { Box } from './Box/Box';
-import { ContactForm } from './ContactForm/ContactForm ';
-import { ContactList } from './ContactList/ContactList';
-import { Filter } from './Filter/Filter';
-import { FcPhoneAndroid } from 'react-icons/fc';
-import { useFetchContactsQuery } from '../redux/contactsSlice';
-import { ColorRing } from 'react-loader-spinner';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, lazy } from 'react';
+import { fetchContacts } from '../redux/contacts/operations';
+import { Route, Routes } from 'react-router-dom';
+import { Layout } from './Layout/Layout';
+import { PrivateRoute } from './PrivateRout';
+import { RestrictedRoute } from './RestrictedRout';
+import { refreshUser } from '../redux/auth/operations';
+import { useAuth } from '../hooks/useAuth';
+import { selectIsLoggedIn } from '../redux/auth/selectors';
+
+const HomePage = lazy(() => import('../pages/Home'));
+const RegisterPage = lazy(() => import('../pages/Register'));
+const LoginPage = lazy(() => import('../pages/Login'));
+const ContactsPage = lazy(() => import('../pages/Contacts'));
 
 export const App = () => {
-  const { data: contact, isLoading } = useFetchContactsQuery();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const { isRefreshing } = useAuth();
 
-  return (
-    <>
-      <Box paddingBottom="30px" paddingTop="30px">
-        <Box
-          paddingBottom="30px"
-          display="flex"
-          flexDirection="column"
-          marginLeft="auto"
-          marginRight="auto"
-          alignItems="center"
-          width="500px"
-          boxShadow="0px 1px 7px rgb(0 0 0), 0px 1px 8px rgb(0 0 0 / 67%), 0px 2px 3px rgb(0 0 0 / 47%)"
-          borderRadius="0px 0px 4px 4px"
-          backgroundColor="#cbcbcb"
-          marginBottom="80px"
-        >
-          <h1>
-            <FcPhoneAndroid size={25} />
-            Phonebook
-          </h1>
-          <ContactForm />
-          <h2>Contacts</h2>
-          {isLoading && <ColorRing />}
-          {contact !== undefined && contact.length > 0 ? (
-            <>
-              {<Filter />}
-              {<ContactList />}
-            </>
-          ) : (
-            <p>No contacts here ...</p>
-          )}
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(fetchContacts());
+    }
+  }, [dispatch, isLoggedIn]);
 
-          {/* )} */}
-        </Box>
-      </Box>
-    </>
+  useEffect(() => {
+    dispatch(refreshUser());
+  }, [dispatch]);
+
+  return isRefreshing ? (
+    <b>Refreshing user...</b>
+  ) : (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route
+          path="/register"
+          element={
+            <RestrictedRoute
+              redirectTo="/contacts"
+              component={<RegisterPage />}
+            />
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RestrictedRoute redirectTo="/contacts" component={<LoginPage />} />
+          }
+        />
+        <Route
+          path="/contacts"
+          element={
+            <PrivateRoute redirectTo="/login" component={<ContactsPage />} />
+          }
+        />
+      </Route>
+    </Routes>
   );
 };
