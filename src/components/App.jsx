@@ -13,7 +13,6 @@ import AuthPage from 'pages/AuthPage/AuthPage';
 
 const HomePage = lazy(() => import('../pages/HomePage/HomePage'));
 const RegisterPage = lazy(() => import('../pages/Register/Register'));
-const LoginPage = lazy(() => import('../pages/Login/Login'));
 const ContactsPage = lazy(() => import('../pages/ContactsPage/Contacts'));
 
 export const App = () => {

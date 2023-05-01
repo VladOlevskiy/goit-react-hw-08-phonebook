@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Label,
-  Input,
-  SearchIcon,
-  BoxInput,
-  PlaceHolder,
-} from './Filter-styled';
+import { Input, SearchIcon, BoxInput, PlaceHolder } from './Filter-styled';
 import { foundedContact } from '../../redux/contacts/filterSlice';
 import { useDispatch } from 'react-redux';
 import { getFilter } from '../../redux/contacts/filterSlice';

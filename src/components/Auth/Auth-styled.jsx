@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { sign_img } from 'media';
 
 export const Section = styled.section`
   background-color: #343437;
