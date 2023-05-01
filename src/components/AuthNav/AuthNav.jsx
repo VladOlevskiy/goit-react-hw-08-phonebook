@@ -5,6 +5,7 @@ export const AuthNav = () => {
     <div>
       <NavLink to="/register">Register</NavLink>
       <NavLink to="/login">Log In</NavLink>
+      {/* <NavLink to="/auth">Auth</NavLink> */}
     </div>
   );
 };

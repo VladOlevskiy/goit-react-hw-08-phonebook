@@ -3,14 +3,16 @@ import { UserMenu } from '../UserMenu/UserMenu';
 import { AuthNav } from '../AuthNav/AuthNav';
 import { useAuth } from '../../hooks/useAuth';
 import { Header } from './AppBar-styled';
+import { Auth } from 'pages/AuthPage/AuthPage';
 
 export const AppBar = () => {
   const { isLoggedIn } = useAuth();
 
   return (
-    <Header>
+    <>
       <Navigation />
-      {isLoggedIn ? <UserMenu /> : <AuthNav />}
-    </Header>
+      {/* {isLoggedIn && <UserMenu />} */}
+      {/* {isLoggedIn && <Auth />} */}
+    </>
   );
 };

@@ -1,5 +1,11 @@
 import React from 'react';
-import { Label, Input } from './Filter-styled';
+import {
+  Label,
+  Input,
+  SearchIcon,
+  BoxInput,
+  PlaceHolder,
+} from './Filter-styled';
 import { foundedContact } from '../../redux/contacts/filterSlice';
 import { useDispatch } from 'react-redux';
 import { getFilter } from '../../redux/contacts/filterSlice';
@@ -14,16 +20,25 @@ export const Filter = () => {
   };
 
   return (
-    <Label>
-      Search
-      <Input
-        minLength={1}
-        debounceTimeout={300}
-        type="text"
-        onChange={onChange}
-        value={filter}
-        placeholder="Search by name..."
-      />
-    </Label>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'baseline',
+        justifyContent: 'center',
+      }}
+    >
+      <BoxInput>
+        <SearchIcon />
+        <Input
+          minLength={1}
+          debounceTimeout={300}
+          type="text"
+          onChange={onChange}
+          value={filter}
+          // placeholder="Search by name..."
+        />
+        <PlaceHolder>Please enter search query</PlaceHolder>
+      </BoxInput>
+    </div>
   );
 };

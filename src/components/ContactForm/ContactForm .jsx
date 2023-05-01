@@ -1,10 +1,23 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { Formik, ErrorMessage } from 'formik';
-import { Form, Label, Field, Button } from './ContactForm-styled';
+import {
+  Form,
+  Field,
+  Button,
+  ModalOverlay,
+  ModalContainer,
+  WrapperCloseBtn,
+  BtnCloseModal,
+  PlaceHolder,
+  BoxInput,
+  IconCloseModal,
+} from './ContactForm-styled';
 import * as yup from 'yup';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../redux/contacts/operations';
+import { createPortal } from 'react-dom';
 
 yup.addMethod(yup.string, 'numeric', function () {
   return this.matches(/^\d+$/, 'The field should have digits only');
@@ -20,12 +33,11 @@ const initialValues = {
   number: '',
 };
 
-export const ContactForm = () => {
+export const ContactForm = ({ modal }) => {
   const dispatch = useDispatch();
 
   const contacts = useSelector(state => state.contacts.items);
   const errorFetch = useSelector(state => state.contacts.error);
-  // const addLoading = useSelector(state => state.contacts.isLoading);
 
   const handleSubmit = async (values, { resetForm }) => {
     if (
@@ -44,37 +56,89 @@ export const ContactForm = () => {
     resetForm();
   };
 
-  return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={schema}
-    >
-      <Form>
-        <Label>
-          Name
-          <Field
-            type="text"
-            name="name"
-            placeholder="Enter your name..."
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-          />
-        </Label>
-        <ErrorMessage name="name" component="div" />
-        <Label>
-          Phone
-          <Field
-            type="tel"
-            name="number"
-            placeholder="Enter your tel..."
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-          />
-        </Label>
-        <ErrorMessage name="number" component="div" />
-        <Button type="submit">Add contact</Button>
-      </Form>
-    </Formik>
+  const handleBackdropClick = event => {
+    if (event.currentTarget === event.target) {
+      modal(false);
+    }
+  };
+  const handleKeyDown = e => {
+    if (e.code === 'Escape') {
+      modal(false);
+      console.log('ESC');
+    }
+  };
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  return createPortal(
+    <ModalOverlay onClick={handleBackdropClick}>
+      <ModalContainer>
+        <WrapperCloseBtn>
+          <div>
+            <BtnCloseModal onClick={() => modal(false)}>
+              <IconCloseModal size={35} />
+            </BtnCloseModal>
+          </div>
+        </WrapperCloseBtn>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          validationSchema={schema}
+        >
+          <Form>
+            <div style={{ width: '87%' }}>
+              <BoxInput style={{ marginBottom: '60px' }}>
+                <Field
+                  type="text"
+                  name="name"
+                  // placeholder="Enter your name..."
+                  title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+                  required
+                />
+                <ErrorMessage
+                  name="name"
+                  component="span"
+                  style={{ color: '#ffff00d6', fontSize: '15px' }}
+                />
+                <PlaceHolder>Enter your name...</PlaceHolder>
+              </BoxInput>
+
+              <BoxInput>
+                <Field
+                  type="tel"
+                  name="number"
+                  // placeholder="Enter your tel..."
+                  title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+                  required
+                />
+                <ErrorMessage
+                  name="number"
+                  component="span"
+                  style={{ color: '#ffff00d6', fontSize: '15px' }}
+                />
+                <PlaceHolder>Enter your tel...</PlaceHolder>
+              </BoxInput>
+            </div>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-evenly',
+              }}
+            >
+              <Button type="submit">Add contact</Button>
+              <Button onClick={() => modal(false)} type="button">
+                Cancel
+              </Button>
+            </div>
+          </Form>
+        </Formik>
+      </ModalContainer>
+    </ModalOverlay>,
+    document.body
   );
 };
