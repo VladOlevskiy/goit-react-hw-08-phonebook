@@ -72,7 +72,7 @@ export const ContactForm = ({ modal }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  });
 
   return createPortal(
     <ModalOverlay onClick={handleBackdropClick}>
