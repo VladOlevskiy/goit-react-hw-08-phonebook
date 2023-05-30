@@ -49,7 +49,6 @@ export const WrapperText = styled.div`
   padding: 15px;
   background: rgba(255, 255, 255, 0.12);
   box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 30px;
-  backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;

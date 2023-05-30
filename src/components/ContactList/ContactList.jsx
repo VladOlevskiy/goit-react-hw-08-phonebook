@@ -21,7 +21,7 @@ import { useState } from 'react';
 
 export const ContactList = () => {
   const dispatch = useDispatch();
-  const [aa, setAa] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const contact = useSelector(state => state.contacts.items);
   const isLoading = useSelector(state => state.contacts.isLoading);
 
@@ -51,18 +51,18 @@ export const ContactList = () => {
                   <WrapperImg>
                     <Img src={user_icon} alt="user icon" />
                     <WrapperText>
-                      {!aa && (
+                      {!showMenu && (
                         <Button
                           type="button"
                           onClick={() => {
-                            setAa(true);
+                            setShowMenu(true);
                           }}
                           disabled={isLoading}
                         >
                           Delete
                         </Button>
                       )}
-                      {aa && (
+                      {showMenu && (
                         <>
                           <Button
                             type="button"
@@ -78,7 +78,7 @@ export const ContactList = () => {
                           <Button
                             type="button"
                             onClick={() => {
-                              setAa(false);
+                              setShowMenu(false);
                             }}
                             disabled={isLoading}
                           >

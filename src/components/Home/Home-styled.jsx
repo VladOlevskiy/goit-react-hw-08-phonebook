@@ -61,16 +61,21 @@ export const WrapperText = styled.div`
   backdrop-filter: blur(20px);
   border-radius: 30px;
   width: 600px;
+  &.main {
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+  }
   @media screen and (max-width: 767px) {
-    left: 50%;
-    transform: translateX(-50%);
+    right: 50%;
+    transform: translateX(50%);
     width: 100%;
     max-width: 500px;
   }
-  &.main {
+  /* &.main {
     width: 800px;
     top: 50%;
     right: 50%;
     transform: translate(50%, -70%);
-  }
+  } */
 `;

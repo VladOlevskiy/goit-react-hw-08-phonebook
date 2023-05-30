@@ -49,6 +49,7 @@ export const ContactForm = ({ modal }) => {
     }
     try {
       await dispatch(addContact(values));
+      modal(false);
       toast.success('Контакт додано успішно');
     } catch (error) {
       toast.error(`Помилка ${errorFetch}, контакт не доданий`);
