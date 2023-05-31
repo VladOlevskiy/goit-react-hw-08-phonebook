@@ -36,7 +36,6 @@ export default function Tasks() {
         </MainTitle>
         <ButtonContactForm onClick={handleForm}>Add contact</ButtonContactForm>
         {showContactForm && <ContactForm modal={setShowContactForm} />}
-        <h2>Contacts</h2>
         {isLoading && <ColorRing />}
         {contact !== undefined && contact.length > 0 ? (
           <>
