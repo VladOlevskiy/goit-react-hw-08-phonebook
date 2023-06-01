@@ -6,7 +6,7 @@ import {
   TextContent,
   WrapperText,
 } from './Home-styled';
-import { hero_img, bg_img, safe_img, reviews_img } from 'media';
+import { hero_img1, bg_img1, safe_img1, reviews_img1 } from 'media';
 
 const Home = () => {
   return (
@@ -14,7 +14,7 @@ const Home = () => {
       <ParallaxEl
         layers={[
           {
-            image: `${hero_img}`,
+            image: `${hero_img1}`,
             expanded: false,
             speed: -35,
             scale: [1, 1.15],
@@ -38,7 +38,7 @@ const Home = () => {
       <ParallaxEl
         layers={[
           {
-            image: `${bg_img}`,
+            image: `${bg_img1}`,
             expanded: false,
             speed: -35,
             scale: [1, 1.15],
@@ -60,7 +60,7 @@ const Home = () => {
       <ParallaxEl
         layers={[
           {
-            image: `${safe_img}`,
+            image: `${safe_img1}`,
             expanded: false,
             speed: -35,
             scale: [1, 1.15],
@@ -84,7 +84,7 @@ const Home = () => {
       <ParallaxEl
         layers={[
           {
-            image: `${reviews_img}`,
+            image: `${reviews_img1}`,
             expanded: false,
             speed: -35,
             scale: [1, 1.15],
